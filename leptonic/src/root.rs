@@ -36,11 +36,11 @@ pub fn Root<T>(
     runtime_js_dir: Oco<'static, str>,
 
     default_theme: T,
-    
+
     children: Children,
 ) -> impl IntoView
 where
-    T: Theme + 'static,
+    T: Theme + 'static + std::fmt::Debug,
 {
     if let Some(_root_context) = use_context::<Leptonic>() {
         tracing::warn!("The <Root> component must only be used once! Detected that <Root> was rendered when it was already rendered higher up the stack. Remove this usage.");
@@ -192,9 +192,10 @@ where
         let tiptap_js_module_includes = view! {};
     }}
 
+    println!("theme: {:?}", create_signal_ls("theme", default_theme));
+
     view! {
         { tiptap_js_module_includes }
-
         <ThemeProvider theme=create_signal_ls("theme", default_theme)>
             <ToastRoot>
                 <ModalRoot>
