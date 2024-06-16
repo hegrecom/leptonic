@@ -419,6 +419,7 @@ pub fn create_signal_ls<
         "read local stroage: {:?}",
         read_from_local_storage::<T>(key)
     );
+    println!("current signal: {:?}", signal.get());
 
     track_in_local_storage(key, signal);
 
