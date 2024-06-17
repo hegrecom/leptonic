@@ -415,11 +415,10 @@ pub fn create_signal_ls<
     initial: T,
 ) -> (ReadSignal<T>, WriteSignal<T>) {
     let (signal, set_signal) = create_signal(read_from_local_storage::<T>(key).unwrap_or(initial));
-    println!(
+    leptos::logging::log!(
         "read local stroage: {:?}",
         read_from_local_storage::<T>(key)
     );
-    println!("current signal: {:?}", signal.get());
 
     track_in_local_storage(key, signal);
 
@@ -429,7 +428,7 @@ pub fn create_signal_ls<
 #[must_use]
 pub fn read_from_local_storage<T: serde::de::DeserializeOwned>(key: &'static str) -> Option<T> {
     let window = use_window();
-    println!("window: {:?}", window);
+    leptos::logging::log!("window: {:?}", window);
     use_window().as_ref().and_then(|window| {
         let storage = window.local_storage().ok()??;
         let stored = storage.get(key).ok()??;
@@ -450,16 +449,16 @@ pub fn track_in_local_storage<T: serde::Serialize + Clone>(
     key: &'static str,
     signal: ReadSignal<T>,
 ) {
-    println!("tracking in local storage: {:?}", key);
+    leptos::logging::log!("tracking in local storage: {:?}", key);
     create_effect(move |_old| {
         if let Some(window) = &*use_window() {
-            println!("saving to local storage: {:?}", key);
+            leptos::logging::log!("saving to local storage: {:?}", key);
             let storage = window.local_storage().ok()??;
             storage
                 .set(key, serde_json::to_string(&signal.get()).ok()?.as_ref())
                 .ok()
         } else {
-            println!("Failed to access window");
+            leptos::logging::log!("Failed to access window");
             Some(())
         }
     });
