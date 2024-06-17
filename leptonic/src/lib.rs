@@ -419,6 +419,7 @@ pub fn create_signal_ls<
         "read local stroage: {:?}",
         read_from_local_storage::<T>(key)
     );
+    tracing::warn!("Console log???");
 
     track_in_local_storage(key, signal);
 

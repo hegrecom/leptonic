@@ -192,8 +192,6 @@ where
         let tiptap_js_module_includes = view! {};
     }}
 
-    println!("theme: {:?}", create_signal_ls("theme", default_theme));
-
     view! {
         { tiptap_js_module_includes }
         <ThemeProvider theme=create_signal_ls("theme", default_theme)>
